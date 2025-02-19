@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>安全跳转提示</title>
+  <style>
+    /* 全局样式 */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* 容器样式 */
+    .container {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 24px;
+      max-width: 320px;
+      width: 90%;
+      text-align: center;
+    }
+
+    /* 提示文字样式 */
+    .tips {
+      font-size: 16px;
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .tips strong {
+      color: #07c160;
+    }
+
+    /* 按钮样式 */
+    .jump-button {
+      background-color: #07c160;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .jump-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .jump-button:hover:not(:disabled) {
+      background-color: #06ad56;
+    }
+
+    /* 倒计时样式 */
+    .countdown {
+      font-size: 14px;
+      color: #666;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="tips">
+      为保障您的安全，请确认跳转至<br>
+      <strong>目标页面</strong>
+    </div>
+    <button class="jump-button" id="jumpButton" disabled>5秒后跳转</button>
+    <div class="countdown" id="countdown"></div>
+  </div>
+
+  <script>
+    // 倒计时逻辑
+    let time = 3;
+    const jumpButton = document.getElementById('jumpButton');
+    const countdown = document.getElementById('countdown');
+
+    const timer = setInterval(() => {
+      time--;
+      countdown.textContent = `${time}秒后自动跳转`;
+      if (time <= 0) {
+        clearInterval(timer);
+        jumpButton.textContent = '立即跳转';
+        jumpButton.disabled = false;
+      }
+    }, 1000);
+
+    // 跳转逻辑
+    jumpButton.addEventListener('click', () => {
+      window.location.href = 'https://v.douyin.com/iPs7Xocq/'; // 替换为目标链接
+    });
+  </script>
+</body>
+</html>
