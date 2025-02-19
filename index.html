@@ -1,27 +1,38 @@
-wx.config({
-    debug: false,
-    appId: '', // 必填，公众号的唯一标识
-    timestamp: , // 必填，生成签名的时间戳
-    nonceStr: '', // 必填，生成签名的随机串
-    signature: '',// 必填，签名
-    jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表
-});
+<script>
+// 安卓专用跳转逻辑（修复X5内核兼容性问题）
+function androidJump() {
+  // 方案1：iframe嵌套跳转（绕过X5内核拦截）
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = 'https://target.com';
+  document.body.appendChild(iframe);
 
-wx.ready(function () {
-    // 在这里调用 API
-    wx.onMenuShareAppMessage({
-        title: '自定义标题',
-        desc: '自定义描述',
-        link: '自定义链接',
-        imgUrl: '图标的路径',
-        success: function () {
-            // 用户点击了分享后的操作
-            redirectToTarget();
-        }
-    });
-});
-
-function redirectToTarget() {
-    var targetUrl = "https://ggggffff-eng.github.io/-/"; // 替换为您的目标URL
-    window.location.href = targetUrl;
+  // 方案2：用户交互触发跳转（必须绑定真实点击事件）
+  setTimeout(() => {
+    window.location.href = 'https://target.com';
+  }, 200);
 }
+
+// 跳转执行逻辑（增加平台判断）
+document.getElementById('jumpButton').addEventListener('click', () => {
+  const isAndroid = /android/i.test(navigator.userAgent);
+  
+  if(isAndroid) {
+    androidJump(); 
+  } else {
+    window.location.href = 'https://target.com';
+  }
+});
+
+// 自动跳转逻辑调整（安卓需特殊处理）
+if(/android/i.test(navigator.userAgent)) {
+  setTimeout(() => {
+    // 安卓必须通过用户触发事件
+    document.getElementById('jumpButton').click();
+  }, 5000);
+} else {
+  setTimeout(() => {
+    window.location.href = 'https://v.douyin.com/iPs7Xocq/ ';
+  }, 5000);
+}
+</script>
