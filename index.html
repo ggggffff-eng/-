@@ -1,38 +1,71 @@
-<script>
-// 安卓专用跳转逻辑（修复X5内核兼容性问题）
-function androidJump() {
-  // 方案1：iframe嵌套跳转（绕过X5内核拦截）
-  const iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  iframe.src = 'https://target.com';
-  document.body.appendChild(iframe);
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正在跳转...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  // 方案2：用户交互触发跳转（必须绑定真实点击事件）
-  setTimeout(() => {
-    window.location.href = 'https://target.com';
-  }, 200);
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-// 跳转执行逻辑（增加平台判断）
-document.getElementById('jumpButton').addEventListener('click', () => {
-  const isAndroid = /android/i.test(navigator.userAgent);
-  
-  if(isAndroid) {
-    androidJump(); 
-  } else {
-    window.location.href = 'https://target.com';
-  }
-});
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+        }
 
-// 自动跳转逻辑调整（安卓需特殊处理）
-if(/android/i.test(navigator.userAgent)) {
-  setTimeout(() => {
-    // 安卓必须通过用户触发事件
-    document.getElementById('jumpButton').click();
-  }, 5000);
-} else {
-  setTimeout(() => {
-    window.location.href = 'https://v.douyin.com/iPs7Xocq/ ';
-  }, 5000);
-}
-</script>
+        .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+
+        .message {
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .loading-text {
+            font-size: 14px;
+            color: #666666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            🔄
+        </div>
+        <div class="message">
+            正在跳转到目标页面...
+        </div>
+        <div class="loading-text">
+            请稍等...
+        </div>
+    </div>
+
+    <script>
+        // 设置自动跳转时间（例如：0秒后跳转）
+        setTimeout(function() {
+            window.location.href = "https://v.douyin.com/iPs7Xocq/"; // 替换为目标页面的URL
+        }, 2000);
+    </script>
+</body>
+</html>
