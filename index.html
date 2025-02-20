@@ -3,69 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>正在跳转...</title>
+    <!-- X5内核优化 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <title>页面加载中...</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #333333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .container {
+            background: #f5f5f5;
             text-align: center;
             padding: 20px;
-            max-width: 600px;
-            width: 90%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
-
-        .icon {
-            font-size: 40px;
-            margin-bottom: 15px;
-            color: #007bff;
-        }
-
-        .message {
+        .loading {
+            color: #666;
             font-size: 16px;
-            margin-bottom: 10px;
-            line-height: 1.5;
+            margin-top: 50px;
         }
-
-        .loading-text {
-            font-size: 14px;
-            color: #666666;
-            margin-top: 10px;
+        .logo {
+            width: 80px;
+            margin: 30px auto;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="icon">
-            🔄
-        </div>
-        <div class="message">
-            正在跳转到目标页面...
-        </div>
-        <div class="loading-text">
-            请稍等...
-        </div>
-    </div>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGnSURBVHgB7ZvRbcMwDEU1ryDvP3mFdgfv0O7QHdodukO7Q3dod+gO6Qd9KBQjQYAEJduJ8w4IEPEBSH4kSbiu6/oe4jj+TAHXdb1V6D9FvV6vj6ZpXkMIP1LZMAwfz+cz9w7S4H3ffwYV3/dvKtD3/Zv0Jw3Qtu2H6qPruncdb9v2XeU5x4HneR4Ph0NOJw0gE+6UAdq2fY1V3nXd0eR5nkfTNHt9VwNQ8XEcj8PhsNf3mQH+OQYQk0kDpJIM5wVQxQBiMmmA4/E4VjGAiEwa4HQ6jVUMICL7LwAqBvjLAP8EUMUAfxlARBYNcD6fRyoGEJFJA1wul5GKAURk0gDX63WkYgARmTTA7XYbqRhARCYNcL/fRyoGEJFJAzwej5GKAURk0gCv12ukYgARmTTA9/c3FQOIyKQBDMPAAGIyaQDDMDAAL4CqAcRk0gCGYWAAXgBVA4jJpAEMw8AAvACqBhCTSQM8n8+RigFEZNIA5DlSMYCILEuW6hQFUJXlC1BVyZRfqkIVxKjq7wAAAABJRU5ErkJggg==" class="logo" alt="安全认证">
+    <div class="loading">安全验证通过，正在进入页面...</div>
 
-    <script>
-        // 设置自动跳转时间（例如：0秒后跳转）
-        setTimeout(function() {
-            window.location.href = "https://v.douyin.com/iPs7Xocq/"; // 替换为目标页面的URL
-        }, 2000);
-    </script>
+<script>
+// 加密目标网址（Base64编码）
+const encryptedUrl = 'aHR0cHM6Ly92LmRvdXlpbi5jb20vaVBzN1hvY3Ev';
+const targetUrl = atob(encryptedUrl);
+
+// 访问统计（PV统计）
+fetch('https://your-analytics-domain.com/api/track?action=visit&ref=' + encodeURIComponent(document.referrer));
+
+// 安卓专用跳转方案
+function androidJump() {
+    // 方案1：创建隐藏iframe
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = targetUrl;
+    document.body.appendChild(iframe);
+
+    // 方案2：模拟用户交互跳转
+    setTimeout(() => {
+        const a = document.createElement('a');
+        a.href = targetUrl;
+        a.dispatchEvent(new MouseEvent('touchstart', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+        }));
+    }, 300);
+
+    // 方案3：直接跳转（备选）
+    setTimeout(() => {
+        window.location.href = targetUrl;
+    }, 500);
+}
+
+// 跳转执行逻辑
+if(/android/i.test(navigator.userAgent)) {
+    // 添加用户交互事件监听（绕过X5限制）
+    document.addEventListener('touchstart', function firstTouch() {
+        document.removeEventListener('touchstart', firstTouch);
+        androidJump();
+        
+        // 跳转统计（UV统计）
+        fetch('https://your-analytics-domain.com/api/track?action=jump');
+    });
+    
+    // 自动触发首次touch事件（透明覆盖层）
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;';
+    overlay.dispatchEvent(new Event('touchstart'));
+    document.body.appendChild(overlay);
+    setTimeout(() => overlay.remove(), 1000);
+} else {
+    window.location.href = https://v.douyin.com/iPs7Xocq/;
+}
+</script>
 </body>
 </html>
