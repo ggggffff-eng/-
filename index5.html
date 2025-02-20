@@ -1,88 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>跳转中间页</title>
+    <!-- X5内核优化 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <!-- 防止缓存 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>页面加载中...</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f5f5f5;
-            overflow: hidden;
-        }
-        .container {
+            background: #f5f5f5;
             text-align: center;
-        }
-        .icon {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 10px;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
         .loading {
-            animation: rotate 1s linear infinite;
+            color: #666;
+            font-size: 16px;
+            margin-top: 50px;
         }
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .logo {
+            width: 80px;
+            margin: 30px auto;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="https://your-icon-url.com/icon.png" alt="Loading" class="icon loading">
-        <p>正在跳转，请稍后...</p>
-    </div>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGnSURBVHgB7ZvRbcMwDEU1ryDvP3mFdgfv0O7QHdodukO7Q3dod+gO6Qd9KBQjQYAEJduJ8w4IEPEBSH4kSbiu6/oe4jj+TAHXdb1V6D9FvV6vj6ZpXkMIP1LZMAwfz+cz9w7S4H3ffwYV3/dvKtD3/Zv0Jw3Qtu2H6qPruncdb9v2XeU5x4HneR4Ph0NOJw0gE+6UAdq2fY1V3nXd0eR5nkfTNHt9VwNQ8XEcj8PhsNf3mQH+OQYQk0kDpJIM5wVQxQBiMmmA4/E4VjGAiEwa4HQ6jVUMICL7LwAqBvjLAP8EUMUAfxlARBYNcD6fRyoGEJFJA1wul5GKAURk0gDX63WkYgARmTTA7XYbqRhARCYNcL/fRyoGEJFJAzwej5GKAURk0gCv12ukYgARmTTA9/c3FQOIyKQBDMPAAGIyaQDDMDAAL4CqAcRk0gCGYWAAXgBVA4jJpAEMw8AAvACqBhCTSQM8n8+RigFEZNIA5DlSMYCILEuW6hQFUJXlC1BVyZRfqkIVxKjq7wAAAABJRU5ErkJggg==" class="logo" alt="安全认证">
+    <div class="loading">安全验证通过，正在进入页面...</div>
 
-    <script>
-        // 加载时记录访问量
-        function logEvent(eventType) {
-            fetch('https://your-analytics-endpoint.com/log', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: eventType })
-            });
-        }
+<script>
+// 加密目标网址（Base64编码）
+const encryptedUrl = 'aHR0cHM6Ly92LmRvdXlpbi5jb20vaVBzN1hvY3Ev';
+const targetUrl = atob(encryptedUrl);
 
-        // 解密函数
-        function decryptAES(encrypted, key, iv) {
-            // Base64 解码
-            const encryptedBytes = atob(encrypted);
-            const keyBytes = atob(key);
-            const ivBytes = atob(iv);
+// 访问统计（PV统计）
+fetch('https://your-analytics-domain.com/api/track?action=visit&ref=' + encodeURIComponent(document.referrer))
+    .catch(() => {}); // 忽略统计失败
 
-            // 转换为 ArrayBuffer
-            const encryptedArray = String.fromCharCode.apply(null, new Uint8Array(Buffer.from(encryptedBytes, 'binary')));
-            const keyArray = String.fromCharCode.apply(null, new Uint8Array(Buffer.from(keyBytes, 'binary')));
-            const ivArray = String.fromCharCode.apply(null, new Uint8Array(Buffer.from(ivBytes, 'binary')));
+// 安卓专用跳转方案
+function androidJump() {
+    // 方案1：创建隐藏iframe
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = targetUrl;
+    document.body.appendChild(iframe);
 
-            // 解密逻辑（示例，需替换为实际解密方法）
-            // 请注意：前端解密存在安全风险，建议仅解密部分信息或在后端解密
-            // 此处使用占位解密逻辑
-            return 'https://v.douyin.com/iPs7Xocq/'; // 示例解密后的 URL
-        }
+    // 方案2：模拟用户交互跳转
+    setTimeout(() => {
+        const a = document.createElement('a');
+        a.href = targetUrl;
+        a.dispatchEvent(new MouseEvent('touchstart', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+        }));
+    }, 300);
 
-        // 页面加载时执行
-        logEvent('visit'); // 记录访问量
+    // 方案3：直接跳转（备选）
+    setTimeout(() => {
+        window.location.href = targetUrl;
+    }, 500);
+}
 
-        // 加密参数
-        const encryptedUrl = 'aUhhaE1YaEZYNWhLclc2VzVSN3FxRThZaHdMZVVRdA==';
-        const key = 'aGVsbG8gd29ybGQ=';
-        const iv = 'aWYgbmVlZCBpbmZvcm1hdGlvbiBpbnZvaXRlZCA=';
+// 跳转执行逻辑
+if(/android/i.test(navigator.userAgent)) {
+    // 添加用户交互事件监听（绕过X5限制）
+    const triggerJump = () => {
+        document.removeEventListener('touchstart', triggerJump);
+        document.removeEventListener('click', triggerJump);
+        androidJump();
+        
+        // 跳转统计（UV统计）
+        fetch('https://your-analytics-domain.com/api/track?action=jump')
+            .catch(() => {}); // 忽略统计失败
+    };
 
-        // 跳转逻辑
-        function redirectToTarget() {
-            const decryptedUrl = decryptAES(encryptedUrl, key, iv); // 解密目标地址
-            window.location.href = decryptedUrl;
-        }
-
-        // 立即执行跳转
-        setTimeout(redirectToTarget, 1000); // 延迟 1 秒跳转
-        logEvent('redirect'); // 记录跳转量
-    </script>
+    // 绑定双事件确保兼容性
+    document.addEventListener('touchstart', triggerJump);
+    document.addEventListener('click', triggerJump);
+    
+    // 自动触发首次touch事件（透明覆盖层）
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;';
+    overlay.addEventListener('touchstart', (e) => e.preventDefault());
+    document.body.appendChild(overlay);
+    setTimeout(() => overlay.remove(), 1000);
+} else {
+    window.location.href = targetUrl;
+}
+</script>
 </body>
 </html>
