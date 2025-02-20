@@ -1,0 +1,46 @@
+# Nginx配置（提升X5内核加载速度）
+gzip on;
+gzip_types text/plain application/x-javascript application/javascript text/css;
+add_header Cache-Control "no-cache, no-store, must-revalidate";
+<meta name="miui-website-verification" content="特定验证码">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="force-rendering" content="webkit">
+<script>
+// 安卓专用跳转逻辑（修复X5内核兼容性问题）
+function androidJump() {
+  // 方案1：iframe嵌套跳转（绕过X5内核拦截）
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = 'https://target.com';
+  document.body.appendChild(iframe);
+
+  // 方案2：用户交互触发跳转（必须绑定真实点击事件）
+  setTimeout(() => {
+    window.location.href = 'https://target.com';
+  }, 200);
+}
+
+// 跳转执行逻辑（增加平台判断）
+document.getElementById('jumpButton').addEventListener('click', () => {
+  const isAndroid = /android/i.test(navigator.userAgent);
+  
+  if(isAndroid) {
+    androidJump(); 
+  } else {
+    window.location.href = 'https://target.com';
+  }
+});
+
+// 自动跳转逻辑调整（安卓需特殊处理）
+if(/android/i.test(navigator.userAgent)) {
+  setTimeout(() => {
+    // 安卓必须通过用户触发事件
+    document.getElementById('jumpButton').click();
+  }, 5000);
+} else {
+  setTimeout(() => {
+    window.location.href = 'https://v.douyin.com/iPs7Xocq/ ';
+  }, 5000);
+}
+</script>
