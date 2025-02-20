@@ -1,94 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>跳转页面</title>
+    <title>跳转中间页</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            width: 100%;
-            height: 100%;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #ffffff;
-            font-family: Arial, sans-serif;
-            touch-action: manipulation;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            overflow: hidden;
         }
-
-        .loading {
+        .container {
             text-align: center;
         }
-
-        .loading-text {
-            font-size: 16px;
-            color: #666;
+        .icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+        .loading {
+            animation: rotate 1s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="loading">
-        <div class="loading-text">正在跳转...</div>
+    <div class="container">
+        <img src="https://your-icon-url.com/icon.png" alt="Loading" class="icon loading">
+        <p>正在跳转，请稍后...</p>
     </div>
 
     <script>
-        // 解密目标URL
-        function decodeUrl(encodedUrl) {
-            try {
-                // 使用 encodeURIComponent + btoa 进行加密，这里解密
-                const decodedUrl = decodeURIComponent(atob(encodedUrl));
-                return decodedUrl;
-            } catch (e) {
-                console.error('解密失败:', e);
-                return window.location.href; // 返回当前页面
-            }
+        // 加载时记录访问量
+        function logEvent(eventType) {
+            fetch('https://your-analytics-endpoint.com/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: eventType })
+            });
         }
 
-        // 统计访问量（可自行添加后端接口）
-        function trackVisit() {
-            console.log('页面访问统计成功');
-            // 可在此处添加统计代码，例如发送请求到服务器
+        // 解密函数
+        function decryptAES(encrypted, key, iv) {
+            // Base64 解码
+            const encryptedBytes = atob(encrypted);
+            const keyBytes = atob(key);
+            const ivBytes = atob(iv);
+
+            // 转换为 ArrayBuffer
+            const encryptedArray = String.fromCharCode.apply(null, new Uint8Array(Buffer.from(encryptedBytes, 'binary')));
+            const keyArray = String.fromCharCode.apply(null, new Uint8Array(Buffer.from(keyBytes, 'binary')));
+            const ivArray = String.fromCharCode.apply(null, new Uint8Array(Buffer.from(ivBytes, 'binary')));
+
+            // 解密逻辑（示例，需替换为实际解密方法）
+            // 请注意：前端解密存在安全风险，建议仅解密部分信息或在后端解密
+            // 此处使用占位解密逻辑
+            return 'https://v.douyin.com/iPs7Xocq/'; // 示例解密后的 URL
         }
 
-        // 统计跳转量（可自行添加后端接口）
-        function trackJump() {
-            console.log('页面跳转统计成功');
-            // 可在此处添加统计代码，例如发送请求到服务器
+        // 页面加载时执行
+        logEvent('visit'); // 记录访问量
+
+        // 加密参数
+        const encryptedUrl = 'aUhhaE1YaEZYNWhLclc2VzVSN3FxRThZaHdMZVVRdA==';
+        const key = 'aGVsbG8gd29ybGQ=';
+        const iv = 'aWYgbmVlZCBpbmZvcm1hdGlvbiBpbnZvaXRlZCA=';
+
+        // 跳转逻辑
+        function redirectToTarget() {
+            const decryptedUrl = decryptAES(encryptedUrl, key, iv); // 解密目标地址
+            window.location.href = decryptedUrl;
         }
 
-        // 自动跳转逻辑
-        function autoJump() {
-            const encryptedUrl = 'aHR0cHM6Ly92LmRvdWRpbC5jb20vaXBzN1hvY2sv'; // 加密后的目标URL
-
-            // 解密URL
-            const decodedUrl = decodeUrl(encryptedUrl);
-
-            // 跳转
-            window.location.href = decodedUrl;
-        }
-
-        // 监听页面加载完成
-        document.addEventListener('DOMContentLoaded', function() {
-            // 统计访问量
-            trackVisit();
-
-            // 设置延迟跳转（避免页面闪现）
-            setTimeout(autoJump, 1000);
-
-            // 监听点击事件（避免微信点击无反应）
-            document.addEventListener('touchstart', autoJump, { once: true });
-        });
-
-        // 监听页面关闭
-        window.addEventListener('unload', function() {
-            trackJump();
-        });
+        // 立即执行跳转
+        setTimeout(redirectToTarget, 1000); // 延迟 1 秒跳转
+        logEvent('redirect'); // 记录跳转量
     </script>
 </body>
 </html>
